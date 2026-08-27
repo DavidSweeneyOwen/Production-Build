@@ -1,6 +1,5 @@
 {
- "generatedAt": "2026-08-27T12:44:39+00:00",
- "sample": true,
+ "generatedAt": "2026-08-27T14:27:05+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -8,884 +7,172 @@
  ],
  "rows": [
   {
-   "item": "BLK-12M2",
-   "description": "Fire Blanket 1.2m x 1.2m",
+   "item": "FX-FFF-002-ACF",
+   "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
-   "onHand": 864,
-   "committed": 197,
-   "available": 667
+   "onHand": 126.0,
+   "committed": 1.0,
+   "available": 125.0
   },
   {
-   "item": "BLK-12M2",
-   "description": "Fire Blanket 1.2m x 1.2m",
+   "item": "FX-FFF-002-ACF",
+   "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Northern Depot",
-   "onHand": 110,
-   "committed": 18,
-   "available": 92
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BLK-18M2",
-   "description": "Fire Blanket 1.8m x 1.8m",
+   "item": "FX-FFF-003-ACF",
+   "description": "Production Build 3ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
-   "onHand": 149,
-   "committed": 26,
-   "available": 123
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BLK-18M2",
-   "description": "Fire Blanket 1.8m x 1.8m",
+   "item": "FX-FFF-003-ACF",
+   "description": "Production Build 3ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Northern Depot",
-   "onHand": 21,
-   "committed": 22,
-   "available": -1
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BLK-18M2",
-   "description": "Fire Blanket 1.8m x 1.8m",
+   "item": "FX-FFF-003-ACF",
+   "description": "Production Build 3ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 683,
-   "committed": 393,
-   "available": 290
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BLK-1M2",
-   "description": "Fire Blanket 1.0m x 1.0m",
+   "item": "FX-FFF-006-ACF",
+   "description": "6ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE Build",
    "location": "Checkfire Unit 19",
-   "onHand": 709,
-   "committed": 768,
-   "available": -59
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BLK-1M2",
-   "description": "Fire Blanket 1.0m x 1.0m",
+   "item": "FX-FFF-006-ACF",
+   "description": "6ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE Build",
    "location": "Northern Depot",
-   "onHand": 228,
-   "committed": 253,
-   "available": -25
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BLK-1M2",
-   "description": "Fire Blanket 1.0m x 1.0m",
+   "item": "FX-FFF-006-ACF",
+   "description": "6ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE Build",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 794,
-   "committed": 340,
-   "available": 454
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BRK-HD-9",
-   "description": "Wall Bracket Heavy Duty 9kg/9L",
+   "item": "FX-FFF-009-ACF",
+   "description": "9ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE Build",
    "location": "Checkfire Unit 19",
-   "onHand": 285,
-   "committed": 211,
-   "available": 74
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BRK-HD-9",
-   "description": "Wall Bracket Heavy Duty 9kg/9L",
+   "item": "FX-FFF-009-ACF",
+   "description": "9ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE Build",
    "location": "Northern Depot",
-   "onHand": 123,
-   "committed": 77,
-   "available": 46
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BRK-HD-9",
-   "description": "Wall Bracket Heavy Duty 9kg/9L",
+   "item": "FX-FFF-009-ACF",
+   "description": "9ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE Build",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 951,
-   "committed": 72,
-   "available": 879
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BRK-STD-6",
-   "description": "Wall Bracket Standard 6kg/6L",
+   "item": "FX-LFX-003-ACF",
+   "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 463,
-   "committed": 343,
-   "available": 120
+   "onHand": 54.0,
+   "committed": 0.0,
+   "available": 54.0
   },
   {
-   "item": "BRK-STD-6",
-   "description": "Wall Bracket Standard 6kg/6L",
+   "item": "FX-LFX-003-ACF",
+   "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Northern Depot",
-   "onHand": 124,
-   "committed": 68,
-   "available": 56
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   },
   {
-   "item": "BRK-STD-6",
-   "description": "Wall Bracket Standard 6kg/6L",
+   "item": "FX-LFX-003-ACF",
+   "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 319,
-   "committed": 289,
-   "available": 30
+   "onHand": 15.0,
+   "committed": 0.0,
+   "available": 15.0
   },
   {
-   "item": "BRK-VEH-2",
-   "description": "Vehicle Bracket 2kg Quick Release",
+   "item": "FX-LFX-006-ACF",
+   "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
+   "location": "Checkfire Unit 19",
+   "onHand": 5.0,
+   "committed": 2.0,
+   "available": 3.0
+  },
+  {
+   "item": "FX-LFX-006-ACF",
+   "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Northern Depot",
-   "onHand": 137,
-   "committed": 87,
-   "available": 50
+   "onHand": 4.0,
+   "committed": 0.0,
+   "available": 4.0
   },
   {
-   "item": "BRK-VEH-2",
-   "description": "Vehicle Bracket 2kg Quick Release",
+   "item": "FX-LFX-006-ACF",
+   "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 632,
-   "committed": 85,
-   "available": 547
+   "onHand": 39.0,
+   "committed": 0.0,
+   "available": 39.0
   },
   {
-   "item": "CP-2Z-CONV",
-   "description": "Conventional Panel 2 Zone",
+   "item": "FX-LFX-009-ACF",
+   "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 800,
-   "committed": 349,
-   "available": 451
+   "onHand": 36.0,
+   "committed": 1.0,
+   "available": 35.0
   },
   {
-   "item": "CP-2Z-CONV",
-   "description": "Conventional Panel 2 Zone",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 749,
-   "committed": 594,
-   "available": 155
-  },
-  {
-   "item": "CP-4Z-CONV",
-   "description": "Conventional Panel 4 Zone",
-   "location": "Checkfire Unit 19",
-   "onHand": 450,
-   "committed": 117,
-   "available": 333
-  },
-  {
-   "item": "CP-4Z-CONV",
-   "description": "Conventional Panel 4 Zone",
+   "item": "FX-LFX-009-ACF",
+   "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Northern Depot",
-   "onHand": 274,
-   "committed": 281,
-   "available": -7
+   "onHand": 1.0,
+   "committed": 0.0,
+   "available": 1.0
   },
   {
-   "item": "CP-BASE-STD",
-   "description": "Detector Base Standard",
-   "location": "Checkfire Unit 19",
-   "onHand": 484,
-   "committed": 192,
-   "available": 292
-  },
-  {
-   "item": "CP-BASE-STD",
-   "description": "Detector Base Standard",
-   "location": "Northern Depot",
-   "onHand": 189,
-   "committed": 203,
-   "available": -14
-  },
-  {
-   "item": "CP-BASE-STD",
-   "description": "Detector Base Standard",
+   "item": "FX-LFX-009-ACF",
+   "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 1531,
-   "committed": 1657,
-   "available": -126
+   "onHand": 46.0,
+   "committed": 5.0,
+   "available": 41.0
   },
   {
-   "item": "DET-HT-A1R",
-   "description": "Heat Detector A1R Rate of Rise",
-   "location": "Checkfire Unit 19",
-   "onHand": 754,
-   "committed": 564,
-   "available": 190
-  },
-  {
-   "item": "DET-HT-A1R",
-   "description": "Heat Detector A1R Rate of Rise",
-   "location": "Northern Depot",
-   "onHand": 133,
-   "committed": 18,
-   "available": 115
-  },
-  {
-   "item": "DET-HT-A1R",
-   "description": "Heat Detector A1R Rate of Rise",
+   "item": "LFXEXTINGUISHER",
+   "description": "6ltr LFX Lithium-Ion Fire Extinguisher",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 1380,
-   "committed": 1382,
-   "available": -2
-  },
-  {
-   "item": "DET-OPT-24",
-   "description": "Optical Smoke Detector 24V",
-   "location": "Checkfire Unit 19",
-   "onHand": 766,
-   "committed": 855,
-   "available": -89
-  },
-  {
-   "item": "DET-OPT-24",
-   "description": "Optical Smoke Detector 24V",
-   "location": "Northern Depot",
-   "onHand": 158,
-   "committed": 32,
-   "available": 126
-  },
-  {
-   "item": "DET-OPT-24",
-   "description": "Optical Smoke Detector 24V",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1388,
-   "committed": 1004,
-   "available": 384
-  },
-  {
-   "item": "EXT-CO2-2",
-   "description": "CO2 Extinguisher 2kg",
-   "location": "Northern Depot",
-   "onHand": 148,
-   "committed": 108,
-   "available": 40
-  },
-  {
-   "item": "EXT-CO2-2",
-   "description": "CO2 Extinguisher 2kg",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 541,
-   "committed": 67,
-   "available": 474
-  },
-  {
-   "item": "EXT-CO2-5",
-   "description": "CO2 Extinguisher 5kg",
-   "location": "Checkfire Unit 19",
-   "onHand": 669,
-   "committed": 453,
-   "available": 216
-  },
-  {
-   "item": "EXT-CO2-5",
-   "description": "CO2 Extinguisher 5kg",
-   "location": "Northern Depot",
-   "onHand": 165,
-   "committed": 119,
-   "available": 46
-  },
-  {
-   "item": "EXT-CO2-5",
-   "description": "CO2 Extinguisher 5kg",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1312,
-   "committed": 898,
-   "available": 414
-  },
-  {
-   "item": "EXT-DP-1",
-   "description": "ABC Dry Powder Extinguisher 1kg",
-   "location": "Checkfire Unit 19",
-   "onHand": 582,
-   "committed": 637,
-   "available": -55
-  },
-  {
-   "item": "EXT-DP-1",
-   "description": "ABC Dry Powder Extinguisher 1kg",
-   "location": "Northern Depot",
-   "onHand": 234,
-   "committed": 255,
-   "available": -21
-  },
-  {
-   "item": "EXT-DP-1",
-   "description": "ABC Dry Powder Extinguisher 1kg",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1405,
-   "committed": 693,
-   "available": 712
-  },
-  {
-   "item": "EXT-DP-2",
-   "description": "ABC Dry Powder Extinguisher 2kg",
-   "location": "Checkfire Unit 19",
-   "onHand": 861,
-   "committed": 172,
-   "available": 689
-  },
-  {
-   "item": "EXT-DP-2",
-   "description": "ABC Dry Powder Extinguisher 2kg",
-   "location": "Northern Depot",
-   "onHand": 20,
-   "committed": 2,
-   "available": 18
-  },
-  {
-   "item": "EXT-DP-2",
-   "description": "ABC Dry Powder Extinguisher 2kg",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 92,
-   "committed": 34,
-   "available": 58
-  },
-  {
-   "item": "EXT-DP-6",
-   "description": "ABC Dry Powder Extinguisher 6kg",
-   "location": "Checkfire Unit 19",
-   "onHand": 401,
-   "committed": 339,
-   "available": 62
-  },
-  {
-   "item": "EXT-DP-6",
-   "description": "ABC Dry Powder Extinguisher 6kg",
-   "location": "Northern Depot",
-   "onHand": 263,
-   "committed": 198,
-   "available": 65
-  },
-  {
-   "item": "EXT-DP-9",
-   "description": "ABC Dry Powder Extinguisher 9kg",
-   "location": "Checkfire Unit 19",
-   "onHand": 627,
-   "committed": 441,
-   "available": 186
-  },
-  {
-   "item": "EXT-DP-9",
-   "description": "ABC Dry Powder Extinguisher 9kg",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 248,
-   "committed": 144,
-   "available": 104
-  },
-  {
-   "item": "EXT-FM-3L",
-   "description": "Foam Extinguisher 3L",
-   "location": "Checkfire Unit 19",
-   "onHand": 608,
-   "committed": 395,
-   "available": 213
-  },
-  {
-   "item": "EXT-FM-3L",
-   "description": "Foam Extinguisher 3L",
-   "location": "Northern Depot",
-   "onHand": 93,
-   "committed": 7,
-   "available": 86
-  },
-  {
-   "item": "EXT-FM-3L",
-   "description": "Foam Extinguisher 3L",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 262,
-   "committed": 154,
-   "available": 108
-  },
-  {
-   "item": "EXT-FM-6L",
-   "description": "Foam Extinguisher 6L",
-   "location": "Checkfire Unit 19",
-   "onHand": 175,
-   "committed": 150,
-   "available": 25
-  },
-  {
-   "item": "EXT-FM-6L",
-   "description": "Foam Extinguisher 6L",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 207,
-   "committed": 126,
-   "available": 81
-  },
-  {
-   "item": "EXT-FM-9L",
-   "description": "Foam Extinguisher 9L",
-   "location": "Checkfire Unit 19",
-   "onHand": 16,
-   "committed": 2,
-   "available": 14
-  },
-  {
-   "item": "EXT-FM-9L",
-   "description": "Foam Extinguisher 9L",
-   "location": "Northern Depot",
-   "onHand": 146,
-   "committed": 42,
-   "available": 104
-  },
-  {
-   "item": "EXT-FM-9L",
-   "description": "Foam Extinguisher 9L",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 878,
-   "committed": 711,
-   "available": 167
-  },
-  {
-   "item": "EXT-WC-2L",
-   "description": "Water Extinguisher 2L Compact",
-   "location": "Checkfire Unit 19",
-   "onHand": 803,
-   "committed": 419,
-   "available": 384
-  },
-  {
-   "item": "EXT-WC-2L",
-   "description": "Water Extinguisher 2L Compact",
-   "location": "Northern Depot",
-   "onHand": 299,
-   "committed": 53,
-   "available": 246
-  },
-  {
-   "item": "EXT-WC-2L",
-   "description": "Water Extinguisher 2L Compact",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1583,
-   "committed": 670,
-   "available": 913
-  },
-  {
-   "item": "EXT-WC-6L",
-   "description": "Water Extinguisher 6L",
-   "location": "Checkfire Unit 19",
-   "onHand": 206,
-   "committed": 28,
-   "available": 178
-  },
-  {
-   "item": "EXT-WC-6L",
-   "description": "Water Extinguisher 6L",
-   "location": "Northern Depot",
-   "onHand": 50,
-   "committed": 8,
-   "available": 42
-  },
-  {
-   "item": "EXT-WC-6L",
-   "description": "Water Extinguisher 6L",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 901,
-   "committed": 368,
-   "available": 533
-  },
-  {
-   "item": "EXT-WC-9L",
-   "description": "Water Extinguisher 9L",
-   "location": "Checkfire Unit 19",
-   "onHand": 853,
-   "committed": 280,
-   "available": 573
-  },
-  {
-   "item": "EXT-WC-9L",
-   "description": "Water Extinguisher 9L",
-   "location": "Northern Depot",
-   "onHand": 55,
-   "committed": 11,
-   "available": 44
-  },
-  {
-   "item": "EXT-WC-9L",
-   "description": "Water Extinguisher 9L",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1444,
-   "committed": 1730,
-   "available": -286
-  },
-  {
-   "item": "EXT-WCH-3L",
-   "description": "Wet Chemical Extinguisher 3L",
-   "location": "Northern Depot",
-   "onHand": 207,
-   "committed": 193,
-   "available": 14
-  },
-  {
-   "item": "EXT-WCH-6L",
-   "description": "Wet Chemical Extinguisher 6L",
-   "location": "Checkfire Unit 19",
-   "onHand": 140,
-   "committed": 44,
-   "available": 96
-  },
-  {
-   "item": "EXT-WCH-6L",
-   "description": "Wet Chemical Extinguisher 6L",
-   "location": "Northern Depot",
-   "onHand": 30,
-   "committed": 17,
-   "available": 13
-  },
-  {
-   "item": "EXT-WCH-6L",
-   "description": "Wet Chemical Extinguisher 6L",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1010,
-   "committed": 681,
-   "available": 329
-  },
-  {
-   "item": "HOSE-CO2-5",
-   "description": "CO2 Discharge Horn & Hose 5kg",
-   "location": "Checkfire Unit 19",
-   "onHand": 450,
-   "committed": 476,
-   "available": -26
-  },
-  {
-   "item": "HOSE-CO2-5",
-   "description": "CO2 Discharge Horn & Hose 5kg",
-   "location": "Northern Depot",
-   "onHand": 96,
-   "committed": 111,
-   "available": -15
-  },
-  {
-   "item": "HOSE-CO2-5",
-   "description": "CO2 Discharge Horn & Hose 5kg",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1144,
-   "committed": 548,
-   "available": 596
-  },
-  {
-   "item": "HR-25-30",
-   "description": "Hose Reel 25m x 19mm Swinging",
-   "location": "Checkfire Unit 19",
-   "onHand": 610,
-   "committed": 313,
-   "available": 297
-  },
-  {
-   "item": "HR-25-30",
-   "description": "Hose Reel 25m x 19mm Swinging",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 51,
-   "committed": 50,
-   "available": 1
-  },
-  {
-   "item": "HR-30-30",
-   "description": "Hose Reel 30m x 19mm Fixed",
-   "location": "Checkfire Unit 19",
-   "onHand": 613,
-   "committed": 312,
-   "available": 301
-  },
-  {
-   "item": "HR-30-30",
-   "description": "Hose Reel 30m x 19mm Fixed",
-   "location": "Northern Depot",
-   "onHand": 96,
-   "committed": 18,
-   "available": 78
-  },
-  {
-   "item": "HR-30-30",
-   "description": "Hose Reel 30m x 19mm Fixed",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 424,
-   "committed": 523,
-   "available": -99
-  },
-  {
-   "item": "HR-NOZ-19",
-   "description": "Hose Reel Nozzle 19mm Brass",
-   "location": "Checkfire Unit 19",
-   "onHand": 355,
-   "committed": 286,
-   "available": 69
-  },
-  {
-   "item": "HR-NOZ-19",
-   "description": "Hose Reel Nozzle 19mm Brass",
-   "location": "Northern Depot",
-   "onHand": 6,
-   "committed": 6,
-   "available": 0
-  },
-  {
-   "item": "HR-NOZ-19",
-   "description": "Hose Reel Nozzle 19mm Brass",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 382,
-   "committed": 338,
-   "available": 44
-  },
-  {
-   "item": "LBL-SVC-25",
-   "description": "Service Label Sheet (Pack 25)",
-   "location": "Northern Depot",
-   "onHand": 248,
-   "committed": 263,
-   "available": -15
-  },
-  {
-   "item": "LBL-SVC-25",
-   "description": "Service Label Sheet (Pack 25)",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1441,
-   "committed": 1633,
-   "available": -192
-  },
-  {
-   "item": "MCP-RES-24",
-   "description": "Manual Call Point Resettable",
-   "location": "Checkfire Unit 19",
-   "onHand": 544,
-   "committed": 184,
-   "available": 360
-  },
-  {
-   "item": "MCP-RES-24",
-   "description": "Manual Call Point Resettable",
-   "location": "Northern Depot",
-   "onHand": 241,
-   "committed": 232,
-   "available": 9
-  },
-  {
-   "item": "PIN-SAF-STD",
-   "description": "Safety Pin Standard (Pack 50)",
-   "location": "Checkfire Unit 19",
-   "onHand": 543,
-   "committed": 340,
-   "available": 203
-  },
-  {
-   "item": "PIN-SAF-STD",
-   "description": "Safety Pin Standard (Pack 50)",
-   "location": "Northern Depot",
-   "onHand": 293,
-   "committed": 293,
-   "available": 0
-  },
-  {
-   "item": "PIN-SAF-STD",
-   "description": "Safety Pin Standard (Pack 50)",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 376,
-   "committed": 104,
-   "available": 272
-  },
-  {
-   "item": "SEAL-TMP-RD",
-   "description": "Tamper Seal Red (Pack 100)",
-   "location": "Checkfire Unit 19",
-   "onHand": 633,
-   "committed": 114,
-   "available": 519
-  },
-  {
-   "item": "SEAL-TMP-RD",
-   "description": "Tamper Seal Red (Pack 100)",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 309,
-   "committed": 152,
-   "available": 157
-  },
-  {
-   "item": "SGN-EXIT-LH",
-   "description": "Fire Exit Sign Left Hand",
-   "location": "Checkfire Unit 19",
-   "onHand": 159,
-   "committed": 76,
-   "available": 83
-  },
-  {
-   "item": "SGN-EXIT-LH",
-   "description": "Fire Exit Sign Left Hand",
-   "location": "Northern Depot",
-   "onHand": 192,
-   "committed": 85,
-   "available": 107
-  },
-  {
-   "item": "SGN-EXIT-LH",
-   "description": "Fire Exit Sign Left Hand",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 871,
-   "committed": 332,
-   "available": 539
-  },
-  {
-   "item": "SGN-EXT-PVC",
-   "description": "Extinguisher ID Sign PVC",
-   "location": "Checkfire Unit 19",
-   "onHand": 625,
-   "committed": 86,
-   "available": 539
-  },
-  {
-   "item": "SGN-EXT-PVC",
-   "description": "Extinguisher ID Sign PVC",
-   "location": "Northern Depot",
-   "onHand": 247,
-   "committed": 131,
-   "available": 116
-  },
-  {
-   "item": "SGN-EXT-PVC",
-   "description": "Extinguisher ID Sign PVC",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 136,
-   "committed": 102,
-   "available": 34
-  },
-  {
-   "item": "SGN-FAP-A5",
-   "description": "Fire Action Notice A5 Rigid",
-   "location": "Checkfire Unit 19",
-   "onHand": 130,
-   "committed": 82,
-   "available": 48
-  },
-  {
-   "item": "SGN-FAP-A5",
-   "description": "Fire Action Notice A5 Rigid",
-   "location": "Northern Depot",
-   "onHand": 205,
-   "committed": 206,
-   "available": -1
-  },
-  {
-   "item": "SGN-FAP-A5",
-   "description": "Fire Action Notice A5 Rigid",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 340,
-   "committed": 22,
-   "available": 318
-  },
-  {
-   "item": "SND-BS-24",
-   "description": "Sounder Beacon 24V Red",
-   "location": "Checkfire Unit 19",
-   "onHand": 803,
-   "committed": 733,
-   "available": 70
-  },
-  {
-   "item": "SND-BS-24",
-   "description": "Sounder Beacon 24V Red",
-   "location": "Northern Depot",
-   "onHand": 57,
-   "committed": 17,
-   "available": 40
-  },
-  {
-   "item": "SND-BS-24",
-   "description": "Sounder Beacon 24V Red",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1388,
-   "committed": 1487,
-   "available": -99
-  },
-  {
-   "item": "STD-DBL-CH",
-   "description": "Double Extinguisher Stand Chrome",
-   "location": "Checkfire Unit 19",
-   "onHand": 26,
-   "committed": 6,
-   "available": 20
-  },
-  {
-   "item": "STD-DBL-CH",
-   "description": "Double Extinguisher Stand Chrome",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 780,
-   "committed": 329,
-   "available": 451
-  },
-  {
-   "item": "STD-SGL-RD",
-   "description": "Single Extinguisher Stand Red",
-   "location": "Checkfire Unit 19",
-   "onHand": 287,
-   "committed": 33,
-   "available": 254
-  },
-  {
-   "item": "STD-SGL-RD",
-   "description": "Single Extinguisher Stand Red",
-   "location": "Northern Depot",
-   "onHand": 59,
-   "committed": 27,
-   "available": 32
-  },
-  {
-   "item": "STD-SGL-RD",
-   "description": "Single Extinguisher Stand Red",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 1105,
-   "committed": 1094,
-   "available": 11
-  },
-  {
-   "item": "SVC-KIT-CO2",
-   "description": "Service Kit CO2 Annual",
-   "location": "Checkfire Unit 19",
-   "onHand": 819,
-   "committed": 934,
-   "available": -115
-  },
-  {
-   "item": "SVC-KIT-CO2",
-   "description": "Service Kit CO2 Annual",
-   "location": "Northern Depot",
-   "onHand": 91,
-   "committed": 24,
-   "available": 67
-  },
-  {
-   "item": "SVC-KIT-CO2",
-   "description": "Service Kit CO2 Annual",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 158,
-   "committed": 96,
-   "available": 62
-  },
-  {
-   "item": "SVC-KIT-DP",
-   "description": "Service Kit Dry Powder Annual",
-   "location": "Checkfire Unit 19",
-   "onHand": 639,
-   "committed": 619,
-   "available": 20
-  },
-  {
-   "item": "SVC-KIT-DP",
-   "description": "Service Kit Dry Powder Annual",
-   "location": "Northern Depot",
-   "onHand": 23,
-   "committed": 3,
-   "available": 20
-  },
-  {
-   "item": "SVC-KIT-DP",
-   "description": "Service Kit Dry Powder Annual",
-   "location": "PJ Fire Main Warehouse",
-   "onHand": 645,
-   "committed": 287,
-   "available": 358
-  },
-  {
-   "item": "VLV-DP-6",
-   "description": "Dry Powder Valve Assembly 6kg",
-   "location": "Checkfire Unit 19",
-   "onHand": 381,
-   "committed": 360,
-   "available": 21
-  },
-  {
-   "item": "VLV-DP-6",
-   "description": "Dry Powder Valve Assembly 6kg",
-   "location": "Northern Depot",
-   "onHand": 100,
-   "committed": 18,
-   "available": 82
+   "onHand": 0.0,
+   "committed": 0.0,
+   "available": 0.0
   }
  ]
 }
