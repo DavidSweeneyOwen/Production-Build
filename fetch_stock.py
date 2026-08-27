@@ -125,12 +125,15 @@ def promote_header(df: pd.DataFrame) -> pd.DataFrame:
     return out[out.iloc[:, 0].map(lambda v: norm(v) != df.columns[0])].reset_index(drop=True)
 
 
-def pick_table(html: str) -> pd.DataFrame:
+def pick_table(html: str, debug: bool = False) -> pd.DataFrame:
     """Return the widest/longest table in the response - NetSuite wraps the
     results grid in layout tables, so take the one with the most cells."""
     tables = pd.read_html(io.StringIO(html))
     if not tables:
         raise RuntimeError("No tables found in the NetSuite response.")
+    if debug:
+        print(f"  response is {len(html):,} chars, {len(tables)} table(s): "
+              f"{[t.shape for t in tables]}")
     return promote_header(max(tables, key=lambda t: t.shape[0] * t.shape[1]))
 
 
@@ -173,15 +176,27 @@ def match_location(raw: str) -> str | None:
 
 def extract(html: str, source: str, debug: bool = False) -> dict[tuple[str, str], dict]:
     """Parse one web query response into {(item, location): record}."""
-    df = pick_table(html)
+    if debug:
+        print(f"\n{'=' * 78}\n--- {source} ---\n{'=' * 78}")
+    df = pick_table(html, debug=debug)
     mapping = map_columns(df)
 
     if debug:
-        print(f"\n--- {source} ---")
-        print(f"shape: {df.shape}")
-        print(f"columns: {list(df.columns)}")
-        print(f"detected mapping: {mapping}")
-        print(df.head(5).to_string())
+        pd.set_option("display.max_columns", None)
+        pd.set_option("display.max_rows", 60)
+        pd.set_option("display.width", 260)
+        pd.set_option("display.max_colwidth", 34)
+        print(f"  chosen table: {df.shape[0]} rows x {df.shape[1]} cols")
+        print(f"  columns     : {list(df.columns)}")
+        print(f"  mapping     : {mapping}")
+        missing = [f for f in ("item", "location", "on_hand", "committed") if f not in mapping]
+        print(f"  MISSING     : {missing or 'nothing - all four fields found'}")
+        print(f"\n  full table:\n{df.to_string()}\n")
+        locs = sorted({norm(v) for v in df[mapping["location"]]}) if "location" in mapping else []
+        if locs:
+            print(f"  distinct locations ({len(locs)}): {locs}")
+            print(f"  of which matched: {sorted({m for m in (match_location(l) for l in locs) if m})}")
+        return {}
 
     if "item" not in mapping or "location" not in mapping:
         raise RuntimeError(
@@ -271,16 +286,23 @@ def main() -> int:
     sources = []
     for label, url in urls:
         if not url:
+            print(f"({label} not configured - skipping)")
             continue
         print(f"Fetching {label} ...")
-        sources.append(extract(fetch(url, email), label, debug=args.debug))
+        if args.debug:
+            # survey every search even if one is broken - never stop at the first
+            try:
+                extract(fetch(url, email), label, debug=True)
+            except Exception as exc:
+                print(f"\n!!! {label} failed: {type(exc).__name__}: {exc}\n")
+            continue
+        sources.append(extract(fetch(url, email), label))
+
+    if args.debug:
+        print("\nDebug run complete - data.json was not written.")
+        return 0
 
     rows = merge(*sources)
-    if args.debug:
-        print(f"\nmerged rows: {len(rows)}")
-        for r in rows[:10]:
-            print(r)
-        return 0
 
     if not rows:
         print("ERROR: no rows matched the target locations - refusing to overwrite data.json.",
