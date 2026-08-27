@@ -1,0 +1,47 @@
+name: Refresh stock data
+
+on:
+  schedule:
+    # Twice a day, Mon-Fri. Times are UTC - in BST these land at 06:30 and 12:30.
+    # (GitHub cron has no DST, so in winter they run at 05:30 and 11:30 UK time.)
+    - cron: "30 5,11 * * 1-5"
+    # Want it near-live instead? Comment out the line above and uncomment this:
+    # - cron: "0,30 6-17 * * 1-5"
+  workflow_dispatch:        # lets you (or Lee) force a pull from the Actions tab
+  repository_dispatch:      # lets an external trigger (e.g. cron-job.org) fire it
+    types: [refresh]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-stock
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Pull NetSuite web queries
+        env:
+          NS_URL_1: ${{ secrets.NS_URL_1 }}
+          NS_URL_2: ${{ secrets.NS_URL_2 }}
+          NS_EMAIL: ${{ secrets.NS_EMAIL }}
+        run: python fetch_stock.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "stock-board-bot"
+          git config user.email "actions@github.com"
+          git add docs/data.json
+          git diff --staged --quiet || git commit -m "Refresh stock data $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
