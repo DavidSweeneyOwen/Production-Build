@@ -18,8 +18,10 @@ once (twice if a sublocation is included). An item appearing three or more
 times means the report still holds every location, and the run aborts rather
 than reporting a group total as one depot's stock.
 
-If a report DOES carry location information - either a Location column or the
-pivoted column-group layout - that is used in preference to the source mapping.
+Some reports also carry a Location column (and a blank "Location: Name
+(Grouped)" grouping column). Those are NOT keyed off directly - they are used
+to cross-check the source mapping, and a disagreement aborts the run, which is
+what catches a URL sitting in the wrong secret.
 
 Run with --debug (or tick "debug" on Run workflow) to dump the detected layout
 without writing data.json.
@@ -265,15 +267,25 @@ def extract(html: str, label: str, location: str, debug: bool = False) -> dict:
             f"  first rows:\n{df.head(4).to_string()}"
         )
 
-    per_row_location = "location" in mapping
+    # Location is assigned from WHICH REPORT the row came from. Any location
+    # column present is used only to cross-check that assignment - some of
+    # these reports carry a grouping column that is blank on data rows, so it
+    # is not safe to key off directly.
+    loc_candidates = [c for c in df.columns if re.search(r"location", norm(c), re.I)]
+
     if debug:
         print(f"  layout   : FLAT ({df.shape[0]} rows x {df.shape[1]} cols)")
         print(f"  columns  : {list(df.columns)}")
         print(f"  mapping  : {mapping}")
-        print(f"  location : {'from Location column' if per_row_location else f'from source = {location}'}")
+        print(f"  location : from source = {location}")
+        for c in loc_candidates:
+            vals = sorted({norm(v) for v in df[c] if norm(v)})
+            hits = sum(1 for v in df[c] if match_location(v))
+            print(f"  xcheck   : {c!r} -> {hits}/{len(df)} rows resolve; values {vals[:6]}")
 
     records: dict[tuple[str, str], dict] = {}
     counts: Counter = Counter()
+    mismatches: Counter = Counter()
     skipped = 0
 
     for _, row in df.iterrows():
@@ -283,22 +295,29 @@ def extract(html: str, label: str, location: str, debug: bool = False) -> dict:
             skipped += 1
             continue
 
-        loc = location
-        if per_row_location:
-            loc = match_location(row[mapping["location"]])
-            if not loc:
-                skipped += 1
-                continue
-        else:
-            counts[item] += 1
+        for c in loc_candidates:
+            seen = match_location(row[c])
+            if seen and seen != location:
+                mismatches[seen] += 1
 
-        rec = records.setdefault((item, loc), blank(item, desc, loc))
+        counts[item] += 1
+        rec = records.setdefault((item, location), blank(item, desc, location))
         if desc and not rec["description"]:
             rec["description"] = desc
         if "on_hand" in mapping:
             rec["on_hand"] += to_number(row[mapping["on_hand"]])
         if "committed" in mapping:
             rec["committed"] += to_number(row[mapping["committed"]])
+
+    if mismatches:
+        raise RuntimeError(
+            f"{label}: LOCATION MISMATCH - this report is mapped to {location},\n"
+            f"  but its own location column says {dict(mismatches)}.\n"
+            f"  Either the URL is in the wrong secret, or the report's filter changed.\n"
+            f"  Check the cr= number in each of NS_URL_1/2/3 against the table in the README."
+        )
+
+    per_row_location = False
 
     # Verify the one-report-per-location assumption.
     if not per_row_location and counts:
