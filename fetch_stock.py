@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
 """
-CheckFire Stock Availability - NetSuite web query -> docs/data.json
+CheckFire Stock Availability - NetSuite web queries -> docs/data.json
 
-Pulls the NetSuite webquery (.iqy) endpoints, parses the returned HTML tables,
-filters to the target locations, and computes:
+Three NetSuite saved reports, one per location. The location is NOT a column in
+the export - it comes from which report the row arrived in:
 
-    Available = On Hand - Committed
+    NS_URL_1  cr=2252  "Production Build Count V3 CF"        -> Checkfire Unit 19
+    NS_URL_3  cr=2254  "Production Build Count V3 Northern"  -> Northern Depot
+    NS_URL_2  cr=2253  "Production Build Count V3 PJ"        -> PJ Fire Main Warehouse
+    NS_EMAIL           the address the .iqy prompts for in Excel
 
-Config comes from environment variables (GitHub Secrets in CI):
+For each item at each location:  Available = On Hand - Committed
 
-    NS_URL_1   full NetSuite webquery URL (cr=2252)
-    NS_URL_2   full NetSuite webquery URL (cr=2253)
-    NS_EMAIL   the email address the .iqy prompts for (optional if already in the URL)
+Because location is inferred from the source, the script verifies that
+assumption: in a correctly filtered single-location report each item appears
+once (twice if a sublocation is included). An item appearing three or more
+times means the report still holds every location, and the run aborts rather
+than reporting a group total as one depot's stock.
 
-Run `python fetch_stock.py --debug` to dump the tables and detected columns
-without writing data.json - use this the first time to confirm the mapping.
+If a report DOES carry location information - either a Location column or the
+pivoted column-group layout - that is used in preference to the source mapping.
+
+Run with --debug (or tick "debug" on Run workflow) to dump the detected layout
+without writing data.json.
 """
 
 from __future__ import annotations
@@ -25,35 +33,51 @@ import json
 import os
 import re
 import sys
+from collections import Counter
 from datetime import datetime, timezone
 from urllib.parse import urlencode, urlparse, parse_qsl, urlunparse
 
 import requests
 import pandas as pd
 
-# --------------------------------------------------------------------------
-# Config
-# --------------------------------------------------------------------------
-
 OUT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs", "data.json")
 
-# Display name -> list of lowercase substrings that identify the location in NetSuite.
-# NetSuite often prefixes locations (e.g. "CheckFire : Unit 19"), so we match on
-# fragments rather than exact strings. Add aliases here if a site is missed.
+# (env var, location this report covers, human label for the logs)
+SOURCES = [
+    ("NS_URL_1", "Checkfire Unit 19", "cr=2252 V3 CF"),
+    ("NS_URL_3", "Northern Depot", "cr=2254 V3 Northern"),
+    ("NS_URL_2", "PJ Fire Main Warehouse", "cr=2253 V3 PJ"),
+]
+
+# Fragments used only when a report DOES expose location names.
 LOCATIONS = {
-    "Checkfire Unit 19": ["unit 19", "unit19"],
-    "Northern Depot": ["northern depot", "northen depot", "northern dep"],
-    "PJ Fire Main Warehouse": ["pj fire main", "pjfire main", "main warehouse"],
+    "Checkfire Unit 19": ["checkfire unit 19", "unit 19"],
+    "Northern Depot": ["northern depot", "northen depot"],
+    "PJ Fire Main Warehouse": ["pj fire", "pjfire"],
 }
 
-# Header matching. First pattern that hits wins.
 FIELD_PATTERNS = {
-    "location": [r"^location$", r"location"],
-    "item": [r"^item$", r"item.*(name|number|id)", r"^name$", r"^sku$", r"item"],
-    "description": [r"description", r"display\s*name", r"^memo$"],
-    "on_hand": [r"on\s*hand(?!.*value)", r"quantity\s*on\s*hand", r"^qty\s*on\s*hand"],
-    "committed": [r"committed", r"quantity\s*committed", r"allocated"],
+    "location": [r"location"],
+    "item": [r"^item$", r"item\s*(name|number|id)$", r"^name$", r"^sku$"],
+    "description": [r"descrip", r"display\s*name"],
+    "on_hand": [r"on\s*hand(?!.*value)"],
+    "committed": [r"committed"],
 }
+
+ON_HAND_RE = re.compile(r"on\s*hand(?!.*value)", re.I)
+COMMITTED_RE = re.compile(r"committed", re.I)
+ITEM_RE = re.compile(r"^item$|item\s*(name|number|id)?$", re.I)
+DESC_RE = re.compile(r"descrip", re.I)
+
+JUNK_ITEM_RE = re.compile(
+    r"^(total\b|assembly/bill of materials$|inventory item$|non-?inventory item$|"
+    r"kit/package$|service$|other charge$|group$)",
+    re.I,
+)
+
+# An item appearing this many times in a single-location report means the
+# report is not actually filtered to one location.
+MAX_ROWS_PER_ITEM = 3
 
 TIMEOUT = 120
 
@@ -63,13 +87,13 @@ TIMEOUT = 120
 # --------------------------------------------------------------------------
 
 def norm(s) -> str:
-    return re.sub(r"\s+", " ", str(s)).strip()
+    if s is None:
+        return ""
+    text = re.sub(r"\s+", " ", str(s)).strip()
+    return "" if text.lower() in ("nan", "none") else text
 
 
 def with_email(url: str, email: str | None) -> str:
-    """NetSuite .iqy URLs carry an Excel prompt placeholder for email:
-        email=["emailaddress","Please enter your email address:"]
-    Replace it with the real address (or add it if missing)."""
     if not email:
         return url
     parts = urlparse(url)
@@ -85,74 +109,13 @@ def fetch(url: str, email: str | None) -> str:
         headers={"User-Agent": "Mozilla/5.0 (compatible; CheckFireStockBoard/1.0)"},
     )
     resp.raise_for_status()
-    if "login" in resp.url.lower() or "<form" in resp.text[:2000].lower():
-        raise RuntimeError(
-            "NetSuite returned a login page - check the hash and email in the URL secret."
-        )
+    if "login" in resp.url.lower():
+        raise RuntimeError("NetSuite returned a login page - check the hash and email.")
     return resp.text
 
 
-def header_score(values) -> int:
-    """How many of our known fields does this row look like it names?"""
-    cells = [norm(v).lower() for v in values]
-    hits = 0
-    for patterns in FIELD_PATTERNS.values():
-        if any(re.search(patterns[0], c) or re.search(patterns[-1], c) for c in cells):
-            hits += 1
-    return hits
-
-
-def promote_header(df: pd.DataFrame) -> pd.DataFrame:
-    """NetSuite renders its header row as <td>, not <th>, so pandas labels the
-    columns 0..n and leaves the real names in the first data row. Detect that
-    and promote the best-looking row to be the header."""
-    labels = [norm(c).lower() for c in df.columns]
-    looks_unlabelled = sum(
-        1 for c in labels if c.isdigit() or c.startswith("unnamed")
-    ) >= max(1, len(labels) * 0.6)
-    if not looks_unlabelled:
-        return df
-
-    best_i, best = 0, -1
-    for i in range(min(6, len(df))):
-        s = header_score(df.iloc[i])
-        if s > best:
-            best_i, best = i, s
-
-    df.columns = [norm(v) for v in df.iloc[best_i]]
-    out = df.iloc[best_i + 1:].reset_index(drop=True)
-    # drop any repeated header rows further down the grid
-    return out[out.iloc[:, 0].map(lambda v: norm(v) != df.columns[0])].reset_index(drop=True)
-
-
-def pick_table(html: str, debug: bool = False) -> pd.DataFrame:
-    """Return the widest/longest table in the response - NetSuite wraps the
-    results grid in layout tables, so take the one with the most cells."""
-    tables = pd.read_html(io.StringIO(html))
-    if not tables:
-        raise RuntimeError("No tables found in the NetSuite response.")
-    if debug:
-        print(f"  response is {len(html):,} chars, {len(tables)} table(s): "
-              f"{[t.shape for t in tables]}")
-    return promote_header(max(tables, key=lambda t: t.shape[0] * t.shape[1]))
-
-
-def map_columns(df: pd.DataFrame) -> dict[str, str]:
-    """Map our canonical field names onto the dataframe's actual column names."""
-    cols = {norm(c).lower(): c for c in df.columns}
-    mapping: dict[str, str] = {}
-    for field, patterns in FIELD_PATTERNS.items():
-        for pattern in patterns:
-            hit = next((orig for low, orig in cols.items() if re.search(pattern, low)), None)
-            if hit and hit not in mapping.values():
-                mapping[field] = hit
-                break
-    return mapping
-
-
 def to_number(value) -> float:
-    if pd.isna(value):
-        return 0.0
+    """NetSuite's web query prefixes figures with '=' (Excel formula escaping)."""
     text = re.sub(r"[^\d.\-]", "", str(value))
     if text in ("", "-", "."):
         return 0.0
@@ -164,160 +127,279 @@ def to_number(value) -> float:
 
 def match_location(raw: str) -> str | None:
     low = norm(raw).lower()
+    if not low or low.startswith("total"):
+        return None
     for display, fragments in LOCATIONS.items():
         if any(f in low for f in fragments):
             return display
     return None
 
 
+def biggest(tables):
+    return max(tables, key=lambda t: t.shape[0] * t.shape[1])
+
+
 # --------------------------------------------------------------------------
-# Core
+# Table reading
 # --------------------------------------------------------------------------
 
-def extract(html: str, source: str, debug: bool = False) -> dict[tuple[str, str], dict]:
-    """Parse one web query response into {(item, location): record}."""
+def promote_header(df: pd.DataFrame) -> pd.DataFrame:
+    """NetSuite renders header cells as <td>, so pandas labels the columns 0..n
+    and leaves the real names in a data row. Find that row and promote it."""
+    labels = [norm(c).lower() for c in df.columns]
+    unlabelled = sum(1 for c in labels if c.isdigit() or c.startswith("unnamed"))
+    if unlabelled < max(1, len(labels) * 0.6):
+        return df
+    best_i, best = 0, -1
+    for i in range(min(6, len(df))):
+        cells = [norm(v).lower() for v in df.iloc[i]]
+        score = sum(1 for pats in FIELD_PATTERNS.values()
+                    if any(re.search(pats[0], c) for c in cells))
+        if score > best:
+            best_i, best = i, score
+    df.columns = [norm(v) for v in df.iloc[best_i]]
+    out = df.iloc[best_i + 1:].reset_index(drop=True)
+    first = df.columns[0]
+    return out[out.iloc[:, 0].map(lambda v: norm(v) != first)].reset_index(drop=True)
+
+
+def read_flat(html: str) -> pd.DataFrame | None:
+    try:
+        tables = pd.read_html(io.StringIO(html))
+    except Exception:
+        return None
+    return promote_header(biggest(tables)) if tables else None
+
+
+def read_pivot(html: str) -> pd.DataFrame | None:
+    try:
+        tables = pd.read_html(io.StringIO(html), header=[0, 1])
+    except Exception:
+        return None
+    tables = [t for t in tables if isinstance(t.columns, pd.MultiIndex) and t.shape[1] > 5]
+    return biggest(tables) if tables else None
+
+
+def map_columns(df: pd.DataFrame) -> dict[str, str]:
+    cols = {norm(c).lower(): c for c in df.columns}
+    mapping: dict[str, str] = {}
+    for field, patterns in FIELD_PATTERNS.items():
+        for pattern in patterns:
+            hit = next((orig for low, orig in cols.items() if re.search(pattern, low)), None)
+            if hit and hit not in mapping.values():
+                mapping[field] = hit
+                break
+    return mapping
+
+
+def map_pivot_columns(df: pd.DataFrame):
+    item_col = desc_col = None
+    groups: dict[str, dict[str, list]] = {}
+    for col in df.columns:
+        top, sub = norm(col[0]), norm(col[1])
+        top_l, sub_l = top.lower(), sub.lower()
+        if top_l.startswith("unnamed") or top_l == sub_l:
+            label = sub if not sub_l.startswith("unnamed") else top
+            if item_col is None and ITEM_RE.search(label):
+                item_col = col
+            elif desc_col is None and DESC_RE.search(label):
+                desc_col = col
+            continue
+        loc = match_location(top)
+        if not loc:
+            continue
+        if ON_HAND_RE.search(sub):
+            groups.setdefault(loc, {}).setdefault("on_hand", []).append(col)
+        elif COMMITTED_RE.search(sub):
+            groups.setdefault(loc, {}).setdefault("committed", []).append(col)
+    return item_col, desc_col, groups
+
+
+# --------------------------------------------------------------------------
+# Extraction
+# --------------------------------------------------------------------------
+
+def blank(item: str, desc: str, loc: str) -> dict:
+    return {"item": item, "description": desc, "location": loc,
+            "on_hand": 0.0, "committed": 0.0}
+
+
+def extract(html: str, label: str, location: str, debug: bool = False) -> dict:
+    """Returns {(item, location): record}. `location` is the site this report
+    is filtered to, used only when the export carries no location itself."""
     if debug:
-        print(f"\n{'=' * 78}\n--- {source} ---\n{'=' * 78}")
-    df = pick_table(html, debug=debug)
+        print(f"\n{'=' * 78}\n--- {label}  ->  {location} ---\n{'=' * 78}")
+
+    # 1. Pivoted layout, locations as column groups (older report style).
+    pivot = read_pivot(html)
+    if pivot is not None:
+        item_col, desc_col, groups = map_pivot_columns(pivot)
+        if item_col is not None and groups:
+            if debug:
+                print(f"  layout   : PIVOT - locations read from column groups {list(groups)}")
+            records = {}
+            for _, row in pivot.iterrows():
+                item = norm(row[item_col])
+                desc = norm(row[desc_col]) if desc_col is not None else ""
+                if not item or JUNK_ITEM_RE.match(item) or not desc:
+                    continue
+                for loc, cols in groups.items():
+                    rec = blank(item, desc, loc)
+                    rec["on_hand"] = sum(to_number(row[c]) for c in cols.get("on_hand", []))
+                    rec["committed"] = sum(to_number(row[c]) for c in cols.get("committed", []))
+                    records[(item, loc)] = rec
+            if debug:
+                print(f"  kept {len(records)} records")
+            return records
+
+    # 2. Flat table.
+    df = read_flat(html)
+    if df is None:
+        raise RuntimeError(f"{label}: no table found in the response.")
     mapping = map_columns(df)
 
-    if debug:
-        pd.set_option("display.max_columns", None)
-        pd.set_option("display.max_rows", 60)
-        pd.set_option("display.width", 260)
-        pd.set_option("display.max_colwidth", 34)
-        print(f"  chosen table: {df.shape[0]} rows x {df.shape[1]} cols")
-        print(f"  columns     : {list(df.columns)}")
-        print(f"  mapping     : {mapping}")
-        missing = [f for f in ("item", "location", "on_hand", "committed") if f not in mapping]
-        print(f"  MISSING     : {missing or 'nothing - all four fields found'}")
-        print(f"\n  full table:\n{df.to_string()}\n")
-        locs = sorted({norm(v) for v in df[mapping["location"]]}) if "location" in mapping else []
-        if locs:
-            print(f"  distinct locations ({len(locs)}): {locs}")
-            print(f"  of which matched: {sorted({m for m in (match_location(l) for l in locs) if m})}")
-        return {}
-
-    if "item" not in mapping or "location" not in mapping:
+    if "item" not in mapping:
         raise RuntimeError(
-            f"{source}: could not find item and location columns.\n"
-            f"  columns found : {list(df.columns)}\n"
-            f"  mapped so far : {mapping}\n"
-            f"  first rows:\n{df.head(4).to_string()}\n"
-            f"Add a pattern to FIELD_PATTERNS for whichever column is missing."
+            f"{label}: no Item column found.\n"
+            f"  columns: {list(df.columns)}\n"
+            f"  first rows:\n{df.head(4).to_string()}"
         )
+
+    per_row_location = "location" in mapping
+    if debug:
+        print(f"  layout   : FLAT ({df.shape[0]} rows x {df.shape[1]} cols)")
+        print(f"  columns  : {list(df.columns)}")
+        print(f"  mapping  : {mapping}")
+        print(f"  location : {'from Location column' if per_row_location else f'from source = {location}'}")
 
     records: dict[tuple[str, str], dict] = {}
+    counts: Counter = Counter()
+    skipped = 0
+
     for _, row in df.iterrows():
-        location = match_location(row[mapping["location"]])
-        if not location:
-            continue
         item = norm(row[mapping["item"]])
-        if not item or item.lower() in ("nan", "total", "-"):
+        desc = norm(row[mapping["description"]]) if "description" in mapping else ""
+        if not item or JUNK_ITEM_RE.match(item) or (("description" in mapping) and not desc):
+            skipped += 1
             continue
 
-        key = (item, location)
-        rec = records.setdefault(
-            key,
-            {
-                "item": item,
-                "description": "",
-                "location": location,
-                "on_hand": None,
-                "committed": None,
-            },
-        )
-        if "description" in mapping:
-            desc = norm(row[mapping["description"]])
-            if desc and desc.lower() != "nan":
-                rec["description"] = desc
+        loc = location
+        if per_row_location:
+            loc = match_location(row[mapping["location"]])
+            if not loc:
+                skipped += 1
+                continue
+        else:
+            counts[item] += 1
+
+        rec = records.setdefault((item, loc), blank(item, desc, loc))
+        if desc and not rec["description"]:
+            rec["description"] = desc
         if "on_hand" in mapping:
-            rec["on_hand"] = to_number(row[mapping["on_hand"]])
+            rec["on_hand"] += to_number(row[mapping["on_hand"]])
         if "committed" in mapping:
-            rec["committed"] = to_number(row[mapping["committed"]])
+            rec["committed"] += to_number(row[mapping["committed"]])
+
+    # Verify the one-report-per-location assumption.
+    if not per_row_location and counts:
+        worst_item, worst = counts.most_common(1)[0]
+        repeated = {i: c for i, c in counts.items() if c > 1}
+        if worst >= MAX_ROWS_PER_ITEM:
+            raise RuntimeError(
+                f"{label}: THIS REPORT IS NOT FILTERED TO A SINGLE LOCATION.\n"
+                f"  '{worst_item}' appears {worst} times, and there is no Location column,\n"
+                f"  so those rows are almost certainly the different sites. Summing them\n"
+                f"  would report the group total as {location}'s stock.\n"
+                f"  Fix the report's location filter in NetSuite, then re-run.\n"
+                f"  Items appearing more than once: {len(repeated)} of {len(counts)}."
+            )
+        if repeated and debug:
+            print(f"  note     : {len(repeated)} item(s) had 2 rows (sublocation) - summed")
+
+    if debug:
+        print(f"  kept {len(records)} records ({skipped} furniture/unmatched rows skipped)")
+        for r in list(records.values())[:10]:
+            print(f"    {r['item']:<20} on hand {r['on_hand']:>8.0f}  "
+                  f"committed {r['committed']:>8.0f}  available {r['on_hand']-r['committed']:>8.0f}")
+
     return records
 
 
 def merge(*sources: dict) -> list[dict]:
-    """Merge records from both web queries. Handles the case where one search
-    carries On Hand and the other carries Committed."""
     merged: dict[tuple[str, str], dict] = {}
     for src in sources:
         for key, rec in src.items():
-            target = merged.setdefault(key, dict(rec))
-            for field in ("on_hand", "committed"):
-                if target.get(field) is None and rec.get(field) is not None:
-                    target[field] = rec[field]
-            if not target.get("description") and rec.get("description"):
-                target["description"] = rec["description"]
+            if key not in merged:
+                merged[key] = dict(rec)
+            elif not merged[key].get("description"):
+                merged[key]["description"] = rec.get("description", "")
 
     rows = []
     for rec in merged.values():
-        on_hand = rec.get("on_hand") or 0.0
-        committed = rec.get("committed") or 0.0
-        rows.append(
-            {
-                "item": rec["item"],
-                "description": rec["description"],
-                "location": rec["location"],
-                "onHand": round(on_hand, 2),
-                "committed": round(committed, 2),
-                "available": round(on_hand - committed, 2),
-            }
-        )
+        oh, cm = rec["on_hand"], rec["committed"]
+        rows.append({
+            "item": rec["item"],
+            "description": rec["description"],
+            "location": rec["location"],
+            "onHand": round(oh, 2),
+            "committed": round(cm, 2),
+            "available": round(oh - cm, 2),
+        })
     rows.sort(key=lambda r: (r["item"].lower(), r["location"]))
     return rows
 
 
+# --------------------------------------------------------------------------
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--debug", action="store_true", help="dump tables, do not write output")
+    parser.add_argument("--debug", action="store_true", help="dump layout, do not write output")
     args = parser.parse_args()
 
     email = os.environ.get("NS_EMAIL")
-    urls = [
-        ("cr=2252", os.environ.get("NS_URL_1")),
-        ("cr=2253", os.environ.get("NS_URL_2")),
-    ]
-    if not any(u for _, u in urls):
-        print("ERROR: set NS_URL_1 (and optionally NS_URL_2).", file=sys.stderr)
+    configured = [(os.environ.get(env), loc, label) for env, loc, label in SOURCES]
+    if not any(u for u, _, _ in configured):
+        print("ERROR: set NS_URL_1 / NS_URL_2 / NS_URL_3.", file=sys.stderr)
         return 1
 
-    sources = []
-    for label, url in urls:
+    sources, failures = [], []
+    for url, loc, label in configured:
         if not url:
-            print(f"({label} not configured - skipping)")
+            print(f"({label} not configured - {loc} will be missing)")
             continue
-        print(f"Fetching {label} ...")
-        if args.debug:
-            # survey every search even if one is broken - never stop at the first
-            try:
-                extract(fetch(url, email), label, debug=True)
-            except Exception as exc:
-                print(f"\n!!! {label} failed: {type(exc).__name__}: {exc}\n")
-            continue
-        sources.append(extract(fetch(url, email), label))
+        print(f"Fetching {label} -> {loc} ...")
+        try:
+            sources.append(extract(fetch(url, email), label, loc, debug=args.debug))
+        except Exception as exc:
+            if not args.debug:
+                raise
+            print(f"\n!!! {label} failed: {type(exc).__name__}: {exc}\n")
+            failures.append(label)
 
     if args.debug:
-        print("\nDebug run complete - data.json was not written.")
+        print(f"\nDebug run complete - data.json was not written."
+              f"{' Failures: ' + ', '.join(failures) if failures else ''}")
         return 0
 
     rows = merge(*sources)
-
     if not rows:
-        print("ERROR: no rows matched the target locations - refusing to overwrite data.json.",
-              file=sys.stderr)
+        print("ERROR: no rows extracted - refusing to overwrite data.json.", file=sys.stderr)
         return 1
 
     payload = {
         "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "locations": list(LOCATIONS.keys()),
+        "locations": [loc for _, loc, _ in SOURCES],
         "rows": rows,
     }
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as fh:
         json.dump(payload, fh, indent=1)
-    print(f"Wrote {len(rows)} rows to {OUT_PATH}")
+
+    by_loc = Counter(r["location"] for r in rows)
+    short = sum(1 for r in rows if r["available"] <= 0)
+    print(f"Wrote {len(rows)} rows to {OUT_PATH} ({short} short)")
+    for loc, n in by_loc.items():
+        print(f"  {loc}: {n} lines")
     return 0
 
 

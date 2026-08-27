@@ -38,8 +38,9 @@ jobs:
 
       - name: Pull NetSuite web queries
         env:
-          NS_URL_1: ${{ secrets.NS_URL_1 }}
-          NS_URL_2: ${{ secrets.NS_URL_2 }}
+          NS_URL_1: ${{ secrets.NS_URL_1 }}   # cr=2252 -> Checkfire Unit 19
+          NS_URL_2: ${{ secrets.NS_URL_2 }}   # cr=2253 -> PJ Fire Main Warehouse
+          NS_URL_3: ${{ secrets.NS_URL_3 }}   # cr=2254 -> Northern Depot
           NS_EMAIL: ${{ secrets.NS_EMAIL }}
         run: python fetch_stock.py ${{ inputs.debug && '--debug' || '' }}
 
