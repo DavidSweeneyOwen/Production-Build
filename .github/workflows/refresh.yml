@@ -8,6 +8,11 @@ on:
     # Want it near-live instead? Comment out the line above and uncomment this:
     # - cron: "0,30 6-17 * * 1-5"
   workflow_dispatch:        # lets you (or Lee) force a pull from the Actions tab
+    inputs:
+      debug:
+        description: "Dump columns and sample rows instead of writing data.json"
+        type: boolean
+        default: false
   repository_dispatch:      # lets an external trigger (e.g. cron-job.org) fire it
     types: [refresh]
 
@@ -36,9 +41,10 @@ jobs:
           NS_URL_1: ${{ secrets.NS_URL_1 }}
           NS_URL_2: ${{ secrets.NS_URL_2 }}
           NS_EMAIL: ${{ secrets.NS_EMAIL }}
-        run: python fetch_stock.py
+        run: python fetch_stock.py ${{ inputs.debug && '--debug' || '' }}
 
       - name: Commit if changed
+        if: ${{ !inputs.debug }}
         run: |
           git config user.name "stock-board-bot"
           git config user.email "actions@github.com"

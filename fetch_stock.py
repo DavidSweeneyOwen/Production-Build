@@ -92,13 +92,46 @@ def fetch(url: str, email: str | None) -> str:
     return resp.text
 
 
+def header_score(values) -> int:
+    """How many of our known fields does this row look like it names?"""
+    cells = [norm(v).lower() for v in values]
+    hits = 0
+    for patterns in FIELD_PATTERNS.values():
+        if any(re.search(patterns[0], c) or re.search(patterns[-1], c) for c in cells):
+            hits += 1
+    return hits
+
+
+def promote_header(df: pd.DataFrame) -> pd.DataFrame:
+    """NetSuite renders its header row as <td>, not <th>, so pandas labels the
+    columns 0..n and leaves the real names in the first data row. Detect that
+    and promote the best-looking row to be the header."""
+    labels = [norm(c).lower() for c in df.columns]
+    looks_unlabelled = sum(
+        1 for c in labels if c.isdigit() or c.startswith("unnamed")
+    ) >= max(1, len(labels) * 0.6)
+    if not looks_unlabelled:
+        return df
+
+    best_i, best = 0, -1
+    for i in range(min(6, len(df))):
+        s = header_score(df.iloc[i])
+        if s > best:
+            best_i, best = i, s
+
+    df.columns = [norm(v) for v in df.iloc[best_i]]
+    out = df.iloc[best_i + 1:].reset_index(drop=True)
+    # drop any repeated header rows further down the grid
+    return out[out.iloc[:, 0].map(lambda v: norm(v) != df.columns[0])].reset_index(drop=True)
+
+
 def pick_table(html: str) -> pd.DataFrame:
     """Return the widest/longest table in the response - NetSuite wraps the
     results grid in layout tables, so take the one with the most cells."""
     tables = pd.read_html(io.StringIO(html))
     if not tables:
         raise RuntimeError("No tables found in the NetSuite response.")
-    return max(tables, key=lambda t: t.shape[0] * t.shape[1])
+    return promote_header(max(tables, key=lambda t: t.shape[0] * t.shape[1]))
 
 
 def map_columns(df: pd.DataFrame) -> dict[str, str]:
@@ -152,8 +185,11 @@ def extract(html: str, source: str, debug: bool = False) -> dict[tuple[str, str]
 
     if "item" not in mapping or "location" not in mapping:
         raise RuntimeError(
-            f"{source}: could not find item and location columns. "
-            f"Found {list(df.columns)}. Add a pattern to FIELD_PATTERNS."
+            f"{source}: could not find item and location columns.\n"
+            f"  columns found : {list(df.columns)}\n"
+            f"  mapped so far : {mapping}\n"
+            f"  first rows:\n{df.head(4).to_string()}\n"
+            f"Add a pattern to FIELD_PATTERNS for whichever column is missing."
         )
 
     records: dict[tuple[str, str], dict] = {}
