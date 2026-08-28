@@ -12,6 +12,12 @@
  *   GH_BRANCH  main            (optional, defaults to main)
  *
  * CORS is configured on the Function App itself (API -> CORS), not here.
+ *
+ * authLevel is "anonymous" deliberately. A function key would have to live in
+ * the public board page to be usable, so it would protect nothing - and GitHub
+ * push protection blocks committing one. The real controls are that this
+ * endpoint can only start one named workflow, and the throttle below caps that
+ * at one run per MIN_GAP_MS.
  */
 
 const { app } = require("@azure/functions");
@@ -25,7 +31,7 @@ function json(body, status) {
 
 app.http("refresh", {
   methods: ["POST"],
-  authLevel: "function",
+  authLevel: "anonymous",
   handler: async (request, context) => {
     const token = process.env.GH_TOKEN;
     const repo = process.env.GH_REPO;
