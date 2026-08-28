@@ -285,7 +285,7 @@ footer{margin-top:1.2rem; font-family:"IBM Plex Mono",monospace; font-size:.68re
   // Alternative: a proxy that holds the token instead (Worker / function).
   // Used only if GH_PAT is empty. Leave both empty and Refresh just re-checks
   // for newly published data.
-  const TRIGGER_URL = "";
+  const TRIGGER_URL = "https://productionbuild-dma8cudse2hhbjam.uksouth-01.azurewebsites.net/api/refresh";
   const POLL_TIMEOUT_MS = 210000;   // Actions run + Pages rebuild
   const POLL_EVERY_MS = 6000;
   const $ = s => document.querySelector(s);
