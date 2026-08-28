@@ -267,6 +267,27 @@ footer{margin-top:1.2rem; font-family:"IBM Plex Mono",monospace; font-size:.68re
 <script>
 (() => {
   const TIGHT = 10;
+
+  // --- Making Refresh actually run the workflow -------------------------
+  // Paste a GitHub fine-grained PAT here. Scope it to THIS REPO ONLY with
+  // "Actions: Read and write" and nothing else - that lets it start a run and
+  // literally nothing more.
+  //
+  // The token is visible to anyone who can view this page, so the repo must be
+  // PRIVATE: GitHub's secret scanning auto-revokes PATs found in public repos,
+  // and a public board hands the token to whoever finds the URL.
+  const GH_PAT = "";
+  const GH_REPO = "DavidSweeneyOwen/Production-Build";
+  const GH_WORKFLOW = "refresh.yml";
+  const GH_BRANCH = "main";
+  const COOLDOWN_MS = 3 * 60 * 1000;   // don't let a stuck key spam runs
+
+  // Alternative: a proxy that holds the token instead (Worker / function).
+  // Used only if GH_PAT is empty. Leave both empty and Refresh just re-checks
+  // for newly published data.
+  const TRIGGER_URL = "";
+  const POLL_TIMEOUT_MS = 210000;   // Actions run + Pages rebuild
+  const POLL_EVERY_MS = 6000;
   const $ = s => document.querySelector(s);
   const state = { rows: [], locations: [], loc: "All", q: "", sort: "item", dir: 1 };
 
@@ -308,14 +329,18 @@ footer{margin-top:1.2rem; font-family:"IBM Plex Mono",monospace; font-size:.68re
 
   async function load(manual = false) {
     const btn = $("#refresh"), label = $("#refreshLabel");
-    btn.dataset.busy = "1";
-    if (manual) label.textContent = "Checking";
+    // While a triggered run is in flight, refreshNow owns the button state.
+    const ownsButton = !triggering;
+    if (ownsButton) btn.dataset.busy = "1";
+    if (manual && ownsButton) label.textContent = "Checking";
     const started = Date.now();
+    let changed = false;
+
     try {
       const res = await fetch(`data.json?t=${Date.now()}`, { cache: "no-store" });
       if (!res.ok) throw new Error(res.status);
       const data = await res.json();
-      const changed = lastStamp !== null && data.generatedAt !== lastStamp;
+      changed = lastStamp !== null && data.generatedAt !== lastStamp;
       const first = lastStamp === null;
       lastStamp = data.generatedAt;
 
@@ -326,7 +351,7 @@ footer{margin-top:1.2rem; font-family:"IBM Plex Mono",monospace; font-size:.68re
       buildSeg();
       render();
 
-      if (manual) {
+      if (manual && ownsButton) {
         // Always spend a beat on it, so the click visibly did something.
         await pause(Math.max(0, 450 - (Date.now() - started)));
         label.textContent = changed ? "Updated" : "No change";
@@ -337,17 +362,18 @@ footer{margin-top:1.2rem; font-family:"IBM Plex Mono",monospace; font-size:.68re
         await pause(2400);
         label.textContent = "Refresh";
         showStamp(lastStamp);
-        return;
       }
     } catch (e) {
       $("#stamp").textContent = "Data unavailable";
       $("#stampRel").textContent = "could not load data.json";
-      if (manual) {
+      if (manual && ownsButton) {
         label.textContent = "Failed";
         setTimeout(() => (label.textContent = "Refresh"), 2400);
       }
+    } finally {
+      if (ownsButton) setTimeout(() => btn.removeAttribute("data-busy"), 350);
     }
-    setTimeout(() => btn.removeAttribute("data-busy"), 350);
+    return changed;
   }
 
   function buildSeg() {
@@ -443,14 +469,111 @@ footer{margin-top:1.2rem; font-family:"IBM Plex Mono",monospace; font-size:.68re
   });
 
   $("#q").oninput = e => { state.q = e.target.value; render(); };
-  $("#refresh").onclick = () => load(true);
+
+  // --- trigger a real NetSuite pull via the Worker, then wait for it to land ---
+  let triggering = false;
+
+  function mmss(ms) {
+    const s = Math.round(ms / 1000);
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  }
+
+  async function settle(text, ms = 3000) {
+    const btn = $("#refresh"), label = $("#refreshLabel");
+    label.textContent = text;
+    btn.removeAttribute("data-busy");
+    triggering = false;
+    await pause(ms);
+    label.textContent = "Refresh";
+    if (lastStamp) showStamp(lastStamp);
+  }
+
+  async function refreshNow() {
+    if (triggering) return;
+    if (!GH_PAT && !TRIGGER_URL) return load(true);
+
+    const btn = $("#refresh"), label = $("#refreshLabel");
+    triggering = true;
+    btn.dataset.busy = "1";
+    label.textContent = "Requesting";
+    $("#stampRel").textContent = "starting a refresh\u2026";
+
+    // Client-side cooldown, so a jammed key or an impatient click can't queue
+    // a pile of runs.
+    try {
+      const last = Number(localStorage.getItem("cf-last-trigger") || 0);
+      const since = Date.now() - last;
+      if (last && since < COOLDOWN_MS) {
+        $("#stampRel").textContent =
+          `last refresh was ${Math.round(since / 1000)}s ago - try again in ${Math.ceil((COOLDOWN_MS - since) / 1000)}s`;
+        return settle("Too soon", 4000);
+      }
+    } catch (e) {}
+
+    let res;
+    try {
+      res = GH_PAT
+        ? await fetch(
+            `https://api.github.com/repos/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/dispatches`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${GH_PAT}`,
+                Accept: "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ ref: GH_BRANCH }),
+            })
+        : await fetch(TRIGGER_URL, { method: "POST" });
+    } catch (e) {
+      $("#stampRel").textContent = "couldn't reach GitHub";
+      return settle("Failed");
+    }
+
+    let body = {};
+    try { body = await res.json(); } catch (e) {}
+
+    if (res.status === 401 || res.status === 403) {
+      $("#stampRel").textContent = "GitHub rejected the token - expired, revoked, or wrong scope";
+      return settle("Failed", 5000);
+    }
+    if (res.status === 429) {
+      $("#stampRel").textContent =
+        `${body.message || "Just refreshed."} Try again in ${body.retryInSeconds || 60}s.`;
+      return settle("Too soon", 4000);
+    }
+    if (!res.ok && res.status !== 202 && res.status !== 204) {
+      $("#stampRel").textContent = body.message || `refresh failed (${res.status})`;
+      return settle("Failed", 4000);
+    }
+
+    try { localStorage.setItem("cf-last-trigger", String(Date.now())); } catch (e) {}
+
+    // Queued (or already running) - poll data.json until the stamp moves.
+    const startedAt = Date.now();
+    while (Date.now() - startedAt < POLL_TIMEOUT_MS) {
+      label.textContent = `Running ${mmss(Date.now() - startedAt)}`;
+      await pause(POLL_EVERY_MS);
+      let changed = false;
+      try { changed = await load(false); } catch (e) {}
+      if (changed) {
+        $("#stampRel").textContent = "updated " + relative(lastStamp);
+        return settle("Updated");
+      }
+    }
+    $("#stampRel").textContent = "run started but hasn't published yet - check Actions";
+    return settle("Timed out", 5000);
+  }
+
+  $("#refresh").onclick = refreshNow;
   document.addEventListener("keydown", e => {
     if (e.key === "/" && document.activeElement !== $("#q")) { e.preventDefault(); $("#q").focus(); }
     if (e.key === "Escape" && document.activeElement === $("#q")) { $("#q").value = ""; state.q = ""; render(); }
   });
 
   load();
-  setInterval(load, 5 * 60 * 1000); // quietly pick up a new publish
+  setInterval(() => { if (!triggering) load(); }, 5 * 60 * 1000); // quietly pick up a new publish
 })();
 </script>
 </body>
