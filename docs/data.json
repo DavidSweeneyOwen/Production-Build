@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-01T10:21:13+00:00",
+ "generatedAt": "2026-09-01T15:31:35+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -50,8 +50,8 @@
    "item": "FX-FFF-002-ACF",
    "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
-   "onHand": 68.0,
-   "committed": 7.0,
+   "onHand": 61.0,
+   "committed": 0.0,
    "available": 61.0
   },
   {
@@ -138,9 +138,9 @@
    "item": "FX-LFX-003-ACF",
    "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 53.0,
-   "committed": 4.0,
-   "available": 49.0
+   "onHand": 48.0,
+   "committed": 1.0,
+   "available": 47.0
   },
   {
    "item": "FX-LFX-003-ACF",
@@ -154,17 +154,17 @@
    "item": "FX-LFX-003-ACF",
    "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 15.0,
-   "committed": 1.0,
+   "onHand": 14.0,
+   "committed": 0.0,
    "available": 14.0
   },
   {
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 0.0,
-   "committed": 0.0,
-   "available": 0.0
+   "onHand": 9.0,
+   "committed": 4.0,
+   "available": 5.0
   },
   {
    "item": "FX-LFX-006-ACF",
@@ -178,17 +178,17 @@
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 39.0,
+   "onHand": 36.0,
    "committed": 0.0,
-   "available": 39.0
+   "available": 36.0
   },
   {
    "item": "FX-LFX-009-ACF",
    "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 34.0,
-   "committed": 4.0,
-   "available": 30.0
+   "onHand": 38.0,
+   "committed": 0.0,
+   "available": 38.0
   },
   {
    "item": "FX-LFX-009-ACF",
