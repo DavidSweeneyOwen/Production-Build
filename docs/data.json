@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-03T07:51:18+00:00",
+ "generatedAt": "2026-09-03T10:01:26+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -59,8 +59,8 @@
    "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
    "onHand": 59.0,
-   "committed": 0.0,
-   "available": 59.0
+   "committed": 4.0,
+   "available": 55.0
   },
   {
    "item": "FX-FFF-002-ACF",
