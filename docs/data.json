@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-15T10:18:25+00:00",
+ "generatedAt": "2026-09-15T15:39:11+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -106,8 +106,8 @@
    "item": "FX-FFF-003-APJ",
    "description": "3ltr Fluorine Free Foam Fire Extinguisher PJ Fire Branded",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 120.0,
-   "committed": 13.0,
+   "onHand": 107.0,
+   "committed": 0.0,
    "available": 107.0
   },
   {
@@ -138,9 +138,9 @@
    "item": "FX-FFF-006-APJ",
    "description": "6ltr Fluorine Free Foam Fire Extinguisher PJ Fire Branded",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 501.0,
+   "onHand": 499.0,
    "committed": 2.0,
-   "available": 499.0
+   "available": 497.0
   },
   {
    "item": "FX-FFF-009-ACF",
@@ -178,9 +178,9 @@
    "item": "FX-LFX-003-ACF",
    "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 10.0,
-   "committed": 1.0,
-   "available": 9.0
+   "onHand": 8.0,
+   "committed": 0.0,
+   "available": 8.0
   },
   {
    "item": "FX-LFX-003-ACF",
@@ -202,17 +202,17 @@
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 9.0,
-   "committed": 2.0,
-   "available": 7.0
+   "onHand": 1.0,
+   "committed": 1.0,
+   "available": 0.0
   },
   {
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Northern Depot",
-   "onHand": 15.0,
+   "onHand": 14.0,
    "committed": 2.0,
-   "available": 13.0
+   "available": 12.0
   },
   {
    "item": "FX-LFX-006-ACF",
@@ -226,9 +226,9 @@
    "item": "FX-LFX-009-ACF",
    "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 9.0,
-   "committed": 0.0,
-   "available": 9.0
+   "onHand": 7.0,
+   "committed": 2.0,
+   "available": 5.0
   },
   {
    "item": "FX-LFX-009-ACF",
