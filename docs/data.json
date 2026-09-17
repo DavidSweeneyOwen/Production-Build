@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-16T15:29:48+00:00",
+ "generatedAt": "2026-09-17T10:17:15+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -58,8 +58,8 @@
    "item": "FX-FFF-002-ACF",
    "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
-   "onHand": 4.0,
-   "committed": 1.0,
+   "onHand": 3.0,
+   "committed": 0.0,
    "available": 3.0
   },
   {
@@ -202,8 +202,8 @@
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 112.0,
-   "committed": 6.0,
+   "onHand": 110.0,
+   "committed": 4.0,
    "available": 106.0
   },
   {
@@ -226,8 +226,8 @@
    "item": "FX-LFX-009-ACF",
    "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 6.0,
-   "committed": 1.0,
+   "onHand": 5.0,
+   "committed": 0.0,
    "available": 5.0
   },
   {
