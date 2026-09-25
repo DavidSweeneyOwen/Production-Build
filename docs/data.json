@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-24T15:53:03+00:00",
+ "generatedAt": "2026-09-25T10:26:11+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -50,16 +50,16 @@
    "item": "CX-LFX-006-ASS",
    "description": "6ltr LFX Stainless Steel Fire Extinguisher - Contempo Branded",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 22.0,
-   "committed": 2.0,
+   "onHand": 20.0,
+   "committed": 0.0,
    "available": 20.0
   },
   {
    "item": "FX-FFF-002-ACF",
    "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
-   "onHand": 53.0,
-   "committed": 2.0,
+   "onHand": 51.0,
+   "committed": 0.0,
    "available": 51.0
   },
   {
@@ -139,8 +139,8 @@
    "description": "6ltr Fluorine Free Foam Fire Extinguisher PJ Fire Branded",
    "location": "PJ Fire Main Warehouse",
    "onHand": 371.0,
-   "committed": 45.0,
-   "available": 326.0
+   "committed": 47.0,
+   "available": 324.0
   },
   {
    "item": "FX-FFF-009-ACF",
