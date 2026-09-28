@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-09-28T11:53:57+00:00",
+ "generatedAt": "2026-09-28T15:26:58+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -58,9 +58,9 @@
    "item": "FX-FFF-002-ACF",
    "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
-   "onHand": 28.0,
+   "onHand": 27.0,
    "committed": 0.0,
-   "available": 28.0
+   "available": 27.0
   },
   {
    "item": "FX-FFF-002-ACF",
@@ -138,8 +138,8 @@
    "item": "FX-FFF-006-APJ",
    "description": "6ltr Fluorine Free Foam Fire Extinguisher PJ Fire Branded",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 353.0,
-   "committed": 41.0,
+   "onHand": 338.0,
+   "committed": 26.0,
    "available": 312.0
   },
   {
@@ -178,9 +178,9 @@
    "item": "FX-LFX-003-ACF",
    "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 70.0,
+   "onHand": 69.0,
    "committed": 0.0,
-   "available": 70.0
+   "available": 69.0
   },
   {
    "item": "FX-LFX-003-ACF",
@@ -202,9 +202,9 @@
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 146.0,
-   "committed": 0.0,
-   "available": 146.0
+   "onHand": 144.0,
+   "committed": 6.0,
+   "available": 138.0
   },
   {
    "item": "FX-LFX-006-ACF",
@@ -218,8 +218,8 @@
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 24.0,
-   "committed": 2.0,
+   "onHand": 22.0,
+   "committed": 0.0,
    "available": 22.0
   },
   {
@@ -243,8 +243,8 @@
    "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "PJ Fire Main Warehouse",
    "onHand": 36.0,
-   "committed": 0.0,
-   "available": 36.0
+   "committed": 1.0,
+   "available": 35.0
   },
   {
    "item": "LFXEXTINGUISHER",
