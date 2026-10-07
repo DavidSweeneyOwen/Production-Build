@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-06T12:10:00+00:00",
+ "generatedAt": "2026-10-07T11:55:53+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -51,16 +51,16 @@
    "description": "6ltr LFX Stainless Steel Fire Extinguisher - Contempo Branded",
    "location": "PJ Fire Main Warehouse",
    "onHand": 20.0,
-   "committed": 0.0,
-   "available": 20.0
+   "committed": 4.0,
+   "available": 16.0
   },
   {
    "item": "FX-FFF-002-ACF",
    "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
-   "onHand": 1.0,
+   "onHand": 0.0,
    "committed": 0.0,
-   "available": 1.0
+   "available": 0.0
   },
   {
    "item": "FX-FFF-002-ACF",
@@ -138,9 +138,9 @@
    "item": "FX-FFF-006-APJ",
    "description": "6ltr Fluorine Free Foam Fire Extinguisher PJ Fire Branded",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 379.0,
-   "committed": 29.0,
-   "available": 350.0
+   "onHand": 371.0,
+   "committed": 52.0,
+   "available": 319.0
   },
   {
    "item": "FX-FFF-009-ACF",
@@ -170,17 +170,17 @@
    "item": "FX-FFF-009-APJ",
    "description": "9ltr Fluorine Free Foam Fire Extinguisher PJ Fire Branded",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 159.0,
-   "committed": 8.0,
+   "onHand": 151.0,
+   "committed": 0.0,
    "available": 151.0
   },
   {
    "item": "FX-LFX-003-ACF",
    "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 52.0,
+   "onHand": 50.0,
    "committed": 0.0,
-   "available": 52.0
+   "available": 50.0
   },
   {
    "item": "FX-LFX-003-ACF",
@@ -202,33 +202,33 @@
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 88.0,
+   "onHand": 73.0,
    "committed": 0.0,
-   "available": 88.0
+   "available": 73.0
   },
   {
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Northern Depot",
-   "onHand": 16.0,
-   "committed": 0.0,
-   "available": 16.0
+   "onHand": 15.0,
+   "committed": 1.0,
+   "available": 14.0
   },
   {
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 21.0,
+   "onHand": 20.0,
    "committed": 0.0,
-   "available": 21.0
+   "available": 20.0
   },
   {
    "item": "FX-LFX-009-ACF",
    "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 38.0,
+   "onHand": 37.0,
    "committed": 0.0,
-   "available": 38.0
+   "available": 37.0
   },
   {
    "item": "FX-LFX-009-ACF",
