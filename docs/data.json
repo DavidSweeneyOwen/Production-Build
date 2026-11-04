@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-03T12:56:39+00:00",
+ "generatedAt": "2026-11-04T13:11:54+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -27,8 +27,8 @@
    "description": "6ltr Fluorine Free Foam Fire Extinguisher - Commander Branded",
    "location": "PJ Fire Main Warehouse",
    "onHand": 480.0,
-   "committed": 0.0,
-   "available": 480.0
+   "committed": 30.0,
+   "available": 450.0
   },
   {
    "item": "6FFFKM-COM-BULK",
@@ -58,9 +58,9 @@
    "item": "FX-FFF-002-ACF",
    "description": "2ltr Fluorine Free Foam Fire Extinguisher CommanderEDGE",
    "location": "Checkfire Unit 19",
-   "onHand": 53.0,
-   "committed": 0.0,
-   "available": 53.0
+   "onHand": 32.0,
+   "committed": 1.0,
+   "available": 31.0
   },
   {
    "item": "FX-FFF-002-ACF",
@@ -138,9 +138,9 @@
    "item": "FX-FFF-006-APJ",
    "description": "6ltr Fluorine Free Foam Fire Extinguisher PJ Fire Branded",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 84.0,
-   "committed": 16.0,
-   "available": 68.0
+   "onHand": 61.0,
+   "committed": 33.0,
+   "available": 28.0
   },
   {
    "item": "FX-FFF-009-ACF",
@@ -179,8 +179,8 @@
    "description": "3ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
    "onHand": 59.0,
-   "committed": 0.0,
-   "available": 59.0
+   "committed": 3.0,
+   "available": 56.0
   },
   {
    "item": "FX-LFX-003-ACF",
@@ -202,17 +202,17 @@
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 94.0,
-   "committed": 1.0,
-   "available": 93.0
+   "onHand": 92.0,
+   "committed": 4.0,
+   "available": 88.0
   },
   {
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Northern Depot",
-   "onHand": 19.0,
+   "onHand": 22.0,
    "committed": 2.0,
-   "available": 17.0
+   "available": 20.0
   },
   {
    "item": "FX-LFX-006-ACF",
@@ -226,9 +226,9 @@
    "item": "FX-LFX-009-ACF",
    "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 39.0,
+   "onHand": 37.0,
    "committed": 0.0,
-   "available": 39.0
+   "available": 37.0
   },
   {
    "item": "FX-LFX-009-ACF",
