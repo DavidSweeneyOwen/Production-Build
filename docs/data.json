@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-11T12:53:24+00:00",
+ "generatedAt": "2026-11-12T13:55:58+00:00",
  "locations": [
   "Checkfire Unit 19",
   "Northern Depot",
@@ -138,9 +138,9 @@
    "item": "FX-FFF-006-APJ",
    "description": "6ltr Fluorine Free Foam Fire Extinguisher PJ Fire Branded",
    "location": "PJ Fire Main Warehouse",
-   "onHand": 73.0,
-   "committed": 27.0,
-   "available": 46.0
+   "onHand": 238.0,
+   "committed": 88.0,
+   "available": 150.0
   },
   {
    "item": "FX-FFF-009-ACF",
@@ -202,16 +202,16 @@
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 136.0,
-   "committed": 5.0,
-   "available": 131.0
+   "onHand": 124.0,
+   "committed": 3.0,
+   "available": 121.0
   },
   {
    "item": "FX-LFX-006-ACF",
    "description": "6ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Northern Depot",
-   "onHand": 17.0,
-   "committed": 1.0,
+   "onHand": 16.0,
+   "committed": 0.0,
    "available": 16.0
   },
   {
@@ -226,9 +226,9 @@
    "item": "FX-LFX-009-ACF",
    "description": "9ltr LFX Fire Extinguisher - CommanderEDGE Made By CF (Metal Valve)",
    "location": "Checkfire Unit 19",
-   "onHand": 75.0,
+   "onHand": 71.0,
    "committed": 0.0,
-   "available": 75.0
+   "available": 71.0
   },
   {
    "item": "FX-LFX-009-ACF",
